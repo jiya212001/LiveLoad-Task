@@ -1,0 +1,29 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background: url('/bgimage.jpg');
+    background-size: cover;
+    background-repeat: "no-repeat";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: center;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+
+
+}
+
+.logo {
+
+    width: 500px;
+    height: 500px;
+    margin-bottom: 400px;
+    margin-right: 900px;
+    z-index: 10;
+}
