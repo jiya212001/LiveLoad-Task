@@ -2,7 +2,7 @@
 import LoginForm from "@/components/login";
 
 import { Box, Stack, Typography } from "@mui/material";
-
+import Image from "next/image";
 import Link from "next/link";
 
 const BackgroundImage = () => {
@@ -31,9 +31,11 @@ const BackgroundImage = () => {
           zIndex: 10,
         }}
       >
-        <img
+        <Image
           src="/logo.png"
           alt="Logo"
+          width={100}
+          height={100}
           style={{ width: "100%", height: "auto" }}
         />
       </Box>
