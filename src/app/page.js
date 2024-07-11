@@ -1,4 +1,4 @@
-"client";
+"use-client";
 import LoginForm from "@/components/login";
 
 import { Box, Stack, Typography } from "@mui/material";
@@ -13,12 +13,19 @@ const BackgroundImage = () => {
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
-        minHeight: "100vh",
+        height: "100%",
+        width: "100%",
         display: "flex",
+        overflowY: "hidden",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         color: "white",
+        minHeight: "100%",
+        "@media (min-width: 344px)": {
+          top: "20%",
+          left: "30%",
+        },
       }}
     >
       <Box
@@ -56,6 +63,12 @@ const BackgroundImage = () => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
+          "@media (min-width: 344px)": {
+            top: "55%",
+            left: "50%",
+            minHeight: "400px",
+            minWidth: "375px",
+          },
         }}
       >
         <Typography
@@ -69,6 +82,12 @@ const BackgroundImage = () => {
             top: "40px",
             left: "40px",
             fontSize: "1.5rem",
+
+            "@media (min-width: 344px)": {
+              fontSize: "1.24rem",
+              top: "50px",
+              left: "20px",
+            },
           }}
         >
           Login To LiveLoads
@@ -87,9 +106,15 @@ const BackgroundImage = () => {
               position: "absolute",
               top: "47px",
               right: "34px",
+
+              "@media (min-width: 344px)": {
+                fontSize: "0.875rem",
+                top: "55px",
+                right: "10px",
+              },
             }}
           >
-            Don&apos;t have an Account
+            Don&apos;t have an Account?
           </Typography>
         </Link>
         <LoginForm />

@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 
-export default function Signup() {
+export default function success() {
   return (
     <Typography
       variant="h5"
@@ -10,7 +10,7 @@ export default function Signup() {
         lineHeight: 1.57,
         fontFamily: "sans-serif",
         fontWeight: 400,
-        color: "black",
+        color: "green",
         cursor: "pointer",
         position: "absolute",
         top: "3vh",
@@ -19,7 +19,7 @@ export default function Signup() {
         textAlign: "center",
       }}
     >
-      Please register over here
+      Congrats you are logged In Successfully
     </Typography>
   );
 }
