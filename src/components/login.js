@@ -20,7 +20,7 @@ const schema = yup.object().shape({
   password: yup.string().required("Password is required"),
 });
 
-const App = () => {
+const login = () => {
   const queryClient = new QueryClient();
 
   return (
@@ -56,23 +56,29 @@ const LoginForm = ({ queryClient }) => {
 
   const mutation = useMutation(login, {
     onSuccess: (data) => {
+      toast.success(data.message);
       router.push("/success");
     },
     onError: (error) => {
-      toast.error(error?.response?.data);
+      toast.error(error?.response?.data?.message);
     },
     queryClient,
   });
 
-  const onSubmit = (formData) => {
-    mutation.mutate(formData);
+  const onSubmit = async (formData) => {
+    const requestData = {
+      username: formData.email,
+      password: formData.password,
+    };
+
+    mutation.mutate(requestData);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
         {...register("email")}
-        label="Email"
+        label="Email Address"
         variant="outlined"
         fullWidth
         margin="normal"
@@ -114,13 +120,17 @@ const LoginForm = ({ queryClient }) => {
         variant="contained"
         fullWidth
         margin="normal"
-        sx={{ mb: -12 }}
+        sx={{
+          mb: -12,
+          color: "#1677FF",
+          color: "white",
+        }}
         disabled={mutation.isLoading}
       >
-        LogIn
+        Login
       </Button>
     </form>
   );
 };
 
-export default App;
+export default login;

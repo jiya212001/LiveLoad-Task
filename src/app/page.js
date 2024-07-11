@@ -1,5 +1,5 @@
 "use-client";
-import LoginForm from "@/components/login";
+import Login from "@/components/login";
 
 import { Box, Stack, Typography } from "@mui/material";
 import Image from "next/image";
@@ -12,7 +12,7 @@ const BackgroundImage = () => {
         backgroundImage: `url('/bgimage.jpg')`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
+        backgroundPosition: "bottom",
         height: "100%",
         width: "100%",
         display: "flex",
@@ -74,16 +74,16 @@ const BackgroundImage = () => {
         <Typography
           variant="h3"
           fontWeight={600}
-          color={"black"}
+          color={"#262626"}
           lineHeight={1.33}
-          fontFamily={"sans - serif"}
+          fontFamily="Public Sans"
           sx={{
             position: "absolute",
             top: "40px",
-            left: "40px",
-            fontSize: "1.5rem",
+            left: "24px",
+            fontSize: "24px",
 
-            "@media (min-width: 344px)": {
+            "@media (max-width: 344px)": {
               fontSize: "1.24rem",
               top: "50px",
               left: "20px",
@@ -97,35 +97,35 @@ const BackgroundImage = () => {
             variant="h5"
             sx={{
               textDecoration: "none",
-              fontSize: "0.875rem",
+              fontSize: "14px",
               lineHeight: 1.57,
-              fontFamily: "sans-serif",
+              fontFamily: "Public Sans",
               fontWeight: 400,
-              color: "blue",
+              color: "#3466D1",
               cursor: "pointer",
               position: "absolute",
               top: "47px",
-              right: "34px",
+              right: "29px",
 
-              "@media (min-width: 344px)": {
+              "@media (max-width: 344px)": {
                 fontSize: "0.875rem",
-                top: "55px",
-                right: "10px",
+                top: "48px",
+                right: "7px",
               },
             }}
           >
-            Don&apos;t have an Account?
+            Don&apos;t have an account?
           </Typography>
         </Link>
-        <LoginForm />
+        <Login />
         <Link href={"/forgotPassword"}>
           <Typography
             variant="h5"
             sx={{
               textDecoration: "none",
-              fontSize: "0.9rem",
+              fontSize: "14px",
               lineHeight: 1.57,
-              fontFamily: "sans-serif",
+              fontFamily: "Public Sans",
               fontWeight: 600,
               color: "#262626",
               cursor: "pointer",
@@ -134,7 +134,7 @@ const BackgroundImage = () => {
               right: "23px",
             }}
           >
-            Forgot Password ?
+            Forgot Password?
           </Typography>
         </Link>
       </Stack>
