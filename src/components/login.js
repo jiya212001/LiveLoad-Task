@@ -10,8 +10,9 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useMutation, QueryClient, QueryClientProvider } from "react-query";
-import { toast } from "react-toastify";
-
+import { ToastContainer } from "react-toastify";
+import toast from "react-hot-toast";
+import "./style.css";
 const schema = yup.object().shape({
   email: yup
     .string()
@@ -76,6 +77,12 @@ const LoginForm = ({ queryClient }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <ToastContainer />
+      {mutation.isLoading && (
+        <div className="overlay">
+          <div className="loading"></div>
+        </div>
+      )}
       <TextField
         {...register("email")}
         label="Email Address"
@@ -122,7 +129,7 @@ const LoginForm = ({ queryClient }) => {
         margin="normal"
         sx={{
           mb: -12,
-          color: "#1677FF",
+          backgroundColor: "#1677ff",
           color: "white",
         }}
         disabled={mutation.isLoading}

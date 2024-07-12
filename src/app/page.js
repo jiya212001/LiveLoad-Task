@@ -16,15 +16,16 @@ const BackgroundImage = () => {
         height: "100%",
         width: "100%",
         display: "flex",
-        overflowY: "hidden",
+        flexWrap: "wrap",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        color: "white",
-        minHeight: "100%",
-        "@media (min-width: 344px)": {
-          top: "20%",
-          left: "30%",
+
+        "@media (max-width: 840px)": {
+          backgroundImage: `url('/bgimage.jpg')`,
+          boxSizing: "border-box",
+          backgroundSize: "contain",
+          backgroundPosition: "bottom",
         },
       }}
     >
@@ -58,7 +59,7 @@ const BackgroundImage = () => {
           padding: "20px",
           backgroundColor: "#ffffff",
           boxShadow: "0 8px 10px rgba(0,0,0,0.1)",
-          borderRadius: "14px",
+          borderRadius: "10px",
           position: "absolute",
           top: "50%",
           left: "50%",
@@ -80,7 +81,7 @@ const BackgroundImage = () => {
           sx={{
             position: "absolute",
             top: "40px",
-            left: "24px",
+            left: "25px",
             fontSize: "24px",
 
             "@media (max-width: 344px)": {
@@ -101,16 +102,16 @@ const BackgroundImage = () => {
               lineHeight: 1.57,
               fontFamily: "Public Sans",
               fontWeight: 400,
-              color: "#3466D1",
+              color: "#3466d1",
               cursor: "pointer",
               position: "absolute",
               top: "47px",
-              right: "29px",
+              right: "8px",
 
               "@media (max-width: 344px)": {
                 fontSize: "0.875rem",
-                top: "48px",
-                right: "7px",
+                top: "calc(60px + 28px)", // Adjust based on the original top position difference
+                right: "calc(17px + 22px)",
               },
             }}
           >
