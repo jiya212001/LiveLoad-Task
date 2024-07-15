@@ -33,6 +33,8 @@ const login = () => {
 
 const LoginForm = ({ queryClient }) => {
   const router = useRouter();
+  const [token, setToken] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -46,13 +48,17 @@ const LoginForm = ({ queryClient }) => {
   const handlePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
-
   const login = async (formData) => {
     const response = await axios.post(
       "https://liveload-api.vercel.app/api/v1/login",
       formData
     );
-    return response.data;
+    console.log("test", response.data.result.session.token);
+    const token = response.data.result.session.token;
+    localStorage.setItem("token", token);
+    setToken(token);
+    console.log("test", response.data.result.session);
+    return response.data.result;
   };
 
   const mutation = useMutation(login, {

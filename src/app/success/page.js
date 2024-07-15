@@ -32,7 +32,8 @@ import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
 import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
 import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutlined";
-
+import Link from "next/link";
+import UsersTable from "../../components/usertable";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -154,16 +155,19 @@ export default function PersistentDrawerLeft() {
         <List>
           {menuItems.map((item, index) => (
             <ListItem key={item.text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
+              <Link href="/individualusers" passHref>
+                <ListItemButton>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </Link>
             </ListItem>
           ))}
         </List>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
+        <UsersTable />
       </Main>
     </Box>
   );
