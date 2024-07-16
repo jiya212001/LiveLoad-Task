@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
@@ -14,15 +13,19 @@ import {
   IconButton,
   TablePagination,
   Button,
+  Typography,
+  Grid,
+  TextField,
 } from "@mui/material";
 import {
   FirstPageRounded as FirstPageRoundedIcon,
   LastPageRounded as LastPageRoundedIcon,
   ChevronLeftRounded as ChevronLeftRoundedIcon,
   ChevronRightRounded as ChevronRightRoundedIcon,
+  SearchRounded as SearchIcon,
 } from "@mui/icons-material";
 import { styled } from "@mui/system";
-import { tablePaginationClasses } from "@mui/base/TablePagination/TablePaginationClasses";
+import { tablePaginationClasses } from "@mui/base/TablePagination/tablePaginationClasses";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -30,6 +33,7 @@ const TableComponent = () => {
   const [token, setToken] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -46,12 +50,25 @@ const TableComponent = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <div style={{ marginBottom: 20, textAlign: "right" }}>
+        <TextField
+          label="Search by Name,Mobile,Email"
+          variant="outlined"
+          size="small"
+          onChange={(e) => setSearchQuery(e.target.value)}
+          InputProps={{
+            endAdornment: <SearchIcon />,
+          }}
+          style={{ width: "300px", height: "auto", marginRight: "34px" }}
+        />
+      </div>
       <UsersTable
         token={token}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={setRowsPerPage}
+        searchQuery={searchQuery}
       />
     </QueryClientProvider>
   );
@@ -66,12 +83,16 @@ const fetchUsers = async ({
   sortDir = "desc",
   fields = "name,mobile,email,status",
   token,
+  searchQuery,
 }) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
+  const searchParams = searchQuery
+    ? `&search=${encodeURIComponent(searchQuery)}`
+    : "";
 
   try {
     const response = await axios.get(
@@ -92,22 +113,35 @@ const UsersTable = ({
   onPageChange,
   rowsPerPage,
   onRowsPerPageChange,
+  searchQuery,
 }) => {
   const { data, isLoading, isError } = useQuery(
-    ["users", currentPage, rowsPerPage],
+    ["users", currentPage, rowsPerPage, searchQuery],
     () =>
       fetchUsers({
         token,
         page: currentPage,
         pageSize: rowsPerPage,
+        searchQuery,
       })
   );
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error fetching data: {isError.message}</p>;
 
-  const users = data?.data || [];
+  let users = data?.data || [];
   const { totalPages, totalLength } = data?.meta_data || {};
+
+  if (searchQuery) {
+    const query = searchQuery.toLowerCase();
+    users = users.filter((user) => {
+      return (
+        (user.name && user.name.toLowerCase().includes(query)) ||
+        (user.email && user.email.toLowerCase().includes(query)) ||
+        (user.mobile && user.mobile.toLowerCase().includes(query))
+      );
+    });
+  }
 
   const handlePageChange = (event, newPage) => {
     onPageChange(newPage + 1);
@@ -119,7 +153,7 @@ const UsersTable = ({
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div style={{ textAlign: "center", marginTop: "auto" }}>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -167,35 +201,53 @@ const UsersTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <StyledTablePagination
-        component="div"
-        count={totalLength}
-        page={currentPage - 1}
-        onPageChange={handlePageChange}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleRowsPerPageChange}
-        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-        labelRowsPerPage="Rows per page:"
-        nextIconButtonText="Next page"
-        backIconButtonText="Previous page"
-        IconComponent={{
-          firstPage: FirstPageRoundedIcon,
-          lastPage: LastPageRoundedIcon,
-          nextPage: ChevronRightRoundedIcon,
-          previousPage: ChevronLeftRoundedIcon,
-        }}
-      />
+      <Grid
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        style={{ marginTop: "16px" }}
+      >
+        <Grid item>
+          <Typography
+            variant="body2"
+            style={{ color: "black", marginLeft: "40px" }}
+          >
+            Total Individual User's: {totalLength}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <StyledTablePagination
+            component="div"
+            count={totalLength}
+            page={currentPage - 1}
+            onPageChange={handlePageChange}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+            labelRowsPerPage="Rows per page:"
+            nextIconButtonText="Next page"
+            backIconButtonText="Previous page"
+            IconComponent={{
+              firstPage: FirstPageRoundedIcon,
+              lastPage: LastPageRoundedIcon,
+              nextPage: ChevronRightRoundedIcon,
+              previousPage: ChevronLeftRoundedIcon,
+            }}
+          />
+        </Grid>
+      </Grid>
     </div>
   );
 };
+
 const StyledTablePagination = styled(TablePagination)(
   ({ theme }) => `
     .${tablePaginationClasses.root} {
       background-color: ${
         theme.palette.mode === "dark" ? "#424242" : "#f0f0f0"
       };
-      padding: ${theme.spacing(2)}px; /* Add padding for spacing */
-      text-align: center; /* Center horizontally */
+      padding: ${theme.spacing(2)}px;
+      text-align: center;
     }
 
     .${tablePaginationClasses.actions}, .${tablePaginationClasses.select} {

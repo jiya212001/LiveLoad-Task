@@ -33,7 +33,8 @@ import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
 import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutlined";
 import Link from "next/link";
-import UsersTable from "../../components/usertable";
+import Image from "next/image";
+import logo from "../../../public/faviconLiveload.png";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -76,27 +77,30 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
 const menuItems = [
-  { text: "Dashboard", icon: <DashboardIcon /> },
-  { text: "Individual Users", icon: <PersonOutlineOutlinedIcon /> },
-  { text: "Business Users", icon: <GroupOutlinedIcon /> },
-  { text: "Vendors", icon: <BoyIcon /> },
-  { text: "Drivers", icon: <AirlineSeatReclineNormalIcon /> },
-  { text: "Orders", icon: <FormatListBulletedIcon /> },
-  { text: "Reviews", icon: <StarIcon /> },
-  { text: "Transactions", icon: <ReceiptLongOutlinedIcon /> },
-  { text: "Withdrawals", icon: <CreditCardOutlinedIcon /> },
-  { text: "Item Categories", icon: <EventNoteIcon /> },
-  { text: "Vehicle Categories", icon: <LocalShippingIcon /> },
-  { text: "Notifications", icon: <NotificationsNoneOutlinedIcon /> },
-  { text: "Contacts Us", icon: <ContactPhoneOutlinedIcon /> },
-  { text: "FAQ's", icon: <LiveHelpOutlinedIcon /> },
-  { text: "CMS Pages", icon: <AutoStoriesOutlinedIcon /> },
-  { text: "Settings", icon: <SettingsSuggestOutlinedIcon /> },
+  { text: "Dashboard", icon: <DashboardIcon />, link: "/" },
+  {
+    text: "Individual Users",
+    icon: <PersonOutlineOutlinedIcon />,
+    link: "/individualusers",
+  },
+  { text: "Business Users", icon: <GroupOutlinedIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Vendors", icon: <BoyIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Drivers", icon: <AirlineSeatReclineNormalIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Orders", icon: <FormatListBulletedIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Reviews", icon: <StarIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Transactions", icon: <ReceiptLongOutlinedIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Withdrawals", icon: <CreditCardOutlinedIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Item Categories", icon: <EventNoteIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Vehicle Categories", icon: <LocalShippingIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Notifications", icon: <NotificationsNoneOutlinedIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Contacts Us", icon: <ContactPhoneOutlinedIcon />, link: "#" }, // Replace with appropriate link
+  { text: "FAQ's", icon: <LiveHelpOutlinedIcon />, link: "#" }, // Replace with appropriate link
+  { text: "CMS Pages", icon: <AutoStoriesOutlinedIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Settings", icon: <SettingsSuggestOutlinedIcon />, link: "#" }, // Replace with appropriate link
 ];
 
 export default function PersistentDrawerLeft() {
@@ -144,6 +148,7 @@ export default function PersistentDrawerLeft() {
         open={open}
       >
         <DrawerHeader>
+          <Image src={logo} alt="Logo" width={150} height={130} />
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
@@ -155,19 +160,37 @@ export default function PersistentDrawerLeft() {
         <List>
           {menuItems.map((item, index) => (
             <ListItem key={item.text} disablePadding>
-              <Link href="/individualusers" passHref>
+              {item.text === "Individual Users" ? (
+                <Link href={item.link} passHref>
+                  <ListItemButton>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItemButton>
+                </Link>
+              ) : (
                 <ListItemButton>
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ListItemText primary={item.text} />
                 </ListItemButton>
-              </Link>
+              )}
             </ListItem>
           ))}
         </List>
       </Drawer>
+      <Typography
+        style={{
+          color: "black",
+          marginTop: "80px",
+          marginLeft: "540px",
+          textAlign: "center",
+          fontWeight: "600px",
+          fontSize: "20px",
+        }}
+      >
+        Welcome To LiveLoad Admin Dashboard
+      </Typography>
       <Main open={open}>
         <DrawerHeader />
-        <UsersTable />
       </Main>
     </Box>
   );
