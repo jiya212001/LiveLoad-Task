@@ -25,9 +25,19 @@ import {
   SearchRounded as SearchIcon,
 } from "@mui/icons-material";
 import { styled } from "@mui/system";
-import { tablePaginationClasses } from "@mui/base/TablePagination/tablePaginationClasses";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
+import { tablePaginationClasses } from "@mui/base/TablePagination/tablePaginationClasses";
+
+const debounce = (func, delay) => {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+};
+
+const queryClient = new QueryClient();
 
 const TableComponent = () => {
   const [token, setToken] = useState("");
@@ -42,11 +52,14 @@ const TableComponent = () => {
     }
   }, []);
 
+  const debouncedSearch = debounce((value) => {
+    setCurrentPage(1);
+    setSearchQuery(value);
+  }, 200);
+
   if (!token) {
     return <p>Please log in to view this page.</p>;
   }
-
-  const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -56,7 +69,7 @@ const TableComponent = () => {
           variant="outlined"
           size="small"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => debouncedSearch(e.target.value)}
           InputProps={{
             endAdornment: <SearchIcon />,
           }}
@@ -126,7 +139,10 @@ const UsersTable = ({
         page: currentPage,
         pageSize: rowsPerPage,
         keyword: searchQuery,
-      })
+      }),
+    {
+      keepPreviousData: true,
+    }
   );
 
   if (isLoading) return <p>Loading...</p>;
@@ -192,7 +208,10 @@ const UsersTable = ({
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <IconButton style={{ color: "#4caf50" }}>
+                  <IconButton
+                    style={{ color: "#4caf50" }}
+                    onClick={() => handleViewUser(user._id)}
+                  >
                     <VisibilityIcon />
                   </IconButton>
                   <IconButton style={{ color: "#1976d2" }}>
