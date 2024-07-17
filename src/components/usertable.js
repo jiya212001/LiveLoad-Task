@@ -52,9 +52,10 @@ const TableComponent = () => {
     <QueryClientProvider client={queryClient}>
       <div style={{ marginBottom: 20, textAlign: "right" }}>
         <TextField
-          label="Search by Name,Mobile,Email"
+          label="Search by Name, Mobile, Email"
           variant="outlined"
           size="small"
+          value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           InputProps={{
             endAdornment: <SearchIcon />,
@@ -69,6 +70,7 @@ const TableComponent = () => {
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={setRowsPerPage}
         searchQuery={searchQuery}
+        onClearSearch={() => setSearchQuery("")}
       />
     </QueryClientProvider>
   );
@@ -83,22 +85,22 @@ const fetchUsers = async ({
   sortDir = "desc",
   fields = "name,mobile,email,status",
   token,
-  searchQuery,
+  keyword,
 }) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
-  const searchParams = searchQuery
-    ? `&search=${encodeURIComponent(searchQuery)}`
-    : "";
+
+  let url = `https://liveload-api.vercel.app/api/v1/users?pageNo=${page}&pageSize=${pageSize}&type=${type}&role=${role}&sortBy=${sortBy}&sortDir=${sortDir}&fields=${fields}`;
+
+  if (keyword) {
+    url += `&keyword=${keyword}`;
+  }
 
   try {
-    const response = await axios.get(
-      `https://liveload-api.vercel.app/api/v1/users?pageNo=${page}&pageSize=${pageSize}&type=${type}&role=${role}&sortBy=${sortBy}&sortDir=${sortDir}&fields=${fields}`,
-      config
-    );
+    const response = await axios.get(url, config);
     return response.data.result;
   } catch (error) {
     throw new Error(
@@ -114,6 +116,7 @@ const UsersTable = ({
   rowsPerPage,
   onRowsPerPageChange,
   searchQuery,
+  onClearSearch,
 }) => {
   const { data, isLoading, isError } = useQuery(
     ["users", currentPage, rowsPerPage, searchQuery],
@@ -122,7 +125,7 @@ const UsersTable = ({
         token,
         page: currentPage,
         pageSize: rowsPerPage,
-        searchQuery,
+        keyword: searchQuery,
       })
   );
 
@@ -223,7 +226,7 @@ const UsersTable = ({
             onPageChange={handlePageChange}
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleRowsPerPageChange}
-            rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+            rowsPerPageOptions={[10, 25, { label: "All", value: -1 }]}
             labelRowsPerPage="Rows per page:"
             nextIconButtonText="Next page"
             backIconButtonText="Previous page"
