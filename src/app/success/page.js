@@ -187,7 +187,7 @@ export default function PersistentDrawerLeft() {
           fontSize: "20px",
         }}
       >
-        Welcome To LiveLoad Admin Dashboard
+        Welcome To LiveLoad
       </Typography>
       <Main open={open}>
         <DrawerHeader />

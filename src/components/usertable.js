@@ -28,7 +28,7 @@ import { styled } from "@mui/system";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import { tablePaginationClasses } from "@mui/base/TablePagination/tablePaginationClasses";
-
+import Link from "next/link";
 const debounce = (func, delay) => {
   let timeoutId;
   return function (...args) {
@@ -55,7 +55,7 @@ const TableComponent = () => {
   const debouncedSearch = debounce((value) => {
     setCurrentPage(1);
     setSearchQuery(value);
-  }, 200);
+  }, 100);
 
   if (!token) {
     return <p>Please log in to view this page.</p>;
@@ -208,12 +208,11 @@ const UsersTable = ({
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <IconButton
-                    style={{ color: "#4caf50" }}
-                    onClick={() => handleViewUser(user._id)}
-                  >
-                    <VisibilityIcon />
-                  </IconButton>
+                  <Link href={`/viewUser/${user._id}`}>
+                    <IconButton style={{ color: "#4caf50" }}>
+                      <VisibilityIcon />
+                    </IconButton>
+                  </Link>
                   <IconButton style={{ color: "#1976d2" }}>
                     <EditIcon />
                   </IconButton>

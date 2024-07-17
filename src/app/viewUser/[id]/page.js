@@ -1,0 +1,28 @@
+import Typography from "@mui/material/Typography";
+import PersistentDrawerLeft from "@/app/success/page";
+export default function IndividualUser() {
+  return (
+    <>
+      <PersistentDrawerLeft />
+      <Typography
+        variant="h5"
+        component="div"
+        sx={{
+          fontSize: "clamp(0.875)",
+          lineHeight: 1.57,
+          fontFamily: "sans-serif",
+          fontWeight: 600,
+          color: "#262626",
+          cursor: "pointer",
+          position: "absolute",
+          top: "120px",
+          left: "250px",
+          maxWidth: "90vw",
+          textAlign: "center",
+        }}
+      >
+        Edit Individual User
+      </Typography>
+    </>
+  );
+}
