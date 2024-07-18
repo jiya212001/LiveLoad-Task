@@ -11,7 +11,6 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -35,6 +34,7 @@ import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutl
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../../public/faviconLiveload.png";
+
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -80,6 +80,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
+
 const menuItems = [
   { text: "Dashboard", icon: <DashboardIcon />, link: "/" },
   {
@@ -87,25 +88,25 @@ const menuItems = [
     icon: <PersonOutlineOutlinedIcon />,
     link: "/individualusers",
   },
-  { text: "Business Users", icon: <GroupOutlinedIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Vendors", icon: <BoyIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Drivers", icon: <AirlineSeatReclineNormalIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Orders", icon: <FormatListBulletedIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Reviews", icon: <StarIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Transactions", icon: <ReceiptLongOutlinedIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Withdrawals", icon: <CreditCardOutlinedIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Item Categories", icon: <EventNoteIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Vehicle Categories", icon: <LocalShippingIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Notifications", icon: <NotificationsNoneOutlinedIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Contacts Us", icon: <ContactPhoneOutlinedIcon />, link: "#" }, // Replace with appropriate link
-  { text: "FAQ's", icon: <LiveHelpOutlinedIcon />, link: "#" }, // Replace with appropriate link
-  { text: "CMS Pages", icon: <AutoStoriesOutlinedIcon />, link: "#" }, // Replace with appropriate link
-  { text: "Settings", icon: <SettingsSuggestOutlinedIcon />, link: "#" }, // Replace with appropriate link
+  { text: "Business Users", icon: <GroupOutlinedIcon />, link: "#" },
+  { text: "Vendors", icon: <BoyIcon />, link: "#" },
+  { text: "Drivers", icon: <AirlineSeatReclineNormalIcon />, link: "#" },
+  { text: "Orders", icon: <FormatListBulletedIcon />, link: "#" },
+  { text: "Reviews", icon: <StarIcon />, link: "#" },
+  { text: "Transactions", icon: <ReceiptLongOutlinedIcon />, link: "#" },
+  { text: "Withdrawals", icon: <CreditCardOutlinedIcon />, link: "#" },
+  { text: "Item Categories", icon: <EventNoteIcon />, link: "#" },
+  { text: "Vehicle Categories", icon: <LocalShippingIcon />, link: "#" },
+  { text: "Notifications", icon: <NotificationsNoneOutlinedIcon />, link: "#" },
+  { text: "Contacts Us", icon: <ContactPhoneOutlinedIcon />, link: "#" },
+  { text: "FAQ's", icon: <LiveHelpOutlinedIcon />, link: "#" },
+  { text: "CMS Pages", icon: <AutoStoriesOutlinedIcon />, link: "#" },
+  { text: "Settings", icon: <SettingsSuggestOutlinedIcon />, link: "#" },
 ];
 
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -123,11 +124,11 @@ export default function PersistentDrawerLeft() {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={open ? handleDrawerClose : handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
+            sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            {open ? <ChevronLeftIcon /> : <MenuIcon />}{" "}
           </IconButton>
           <Typography variant="h6" noWrap component="div">
             Liveload's | Welcome Admin
@@ -148,14 +149,7 @@ export default function PersistentDrawerLeft() {
         open={open}
       >
         <DrawerHeader>
-          <Image src={logo} alt="Logo" width={150} height={130} />
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
+          <Image src={logo} alt="Logo" width={200} height={100} />
         </DrawerHeader>
         <List>
           {menuItems.map((item, index) => (
@@ -177,21 +171,7 @@ export default function PersistentDrawerLeft() {
           ))}
         </List>
       </Drawer>
-      <Typography
-        style={{
-          color: "black",
-          marginTop: "80px",
-          marginLeft: "540px",
-          textAlign: "center",
-          fontWeight: "600px",
-          fontSize: "20px",
-        }}
-      >
-        Welcome To LiveLoad
-      </Typography>
-      <Main open={open}>
-        <DrawerHeader />
-      </Main>
+      <Main open={open}></Main>
     </Box>
   );
 }

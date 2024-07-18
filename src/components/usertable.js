@@ -64,6 +64,12 @@ const TableComponent = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <div style={{ marginBottom: 20, textAlign: "right" }}>
+        <Typography
+          variant="h6"
+          style={{ color: "black", textAlign: "center" }}
+        >
+          Dashboard/Individual User
+        </Typography>
         <TextField
           label="Search by Name, Mobile, Email"
           variant="outlined"
@@ -208,7 +214,7 @@ const UsersTable = ({
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <Link href={`/viewUser/${user._id}`}>
+                  <Link href={`/viewUser/userId=${user._id}`}>
                     <IconButton style={{ color: "#4caf50" }}>
                       <VisibilityIcon />
                     </IconButton>
