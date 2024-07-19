@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { TextField, IconButton, InputAdornment } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import * as yup from "yup";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -13,6 +12,8 @@ import { useMutation, QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import toast from "react-hot-toast";
 import "./style.css";
+import * as yup from "yup";
+
 const schema = yup.object().shape({
   email: yup
     .string()
@@ -21,46 +22,20 @@ const schema = yup.object().shape({
   password: yup.string().required("Password is required"),
 });
 
-const login = () => {
-  const queryClient = new QueryClient();
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <LoginForm queryClient={queryClient} />
-    </QueryClientProvider>
+const login = async (formData) => {
+  const response = await axios.post(
+    "https://liveload-api.vercel.app/api/v1/login",
+    formData
   );
+  const token = response.data.result.session.token;
+  localStorage.setItem("token", token);
+  return response.data.result;
 };
 
-const LoginForm = ({ queryClient }) => {
+const LoginForm = () => {
   const router = useRouter();
-  const [token, setToken] = useState("");
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
-
   const [showPassword, setShowPassword] = useState(false);
-
-  const handlePasswordVisibility = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
-  };
-  const login = async (formData) => {
-    const response = await axios.post(
-      "https://liveload-api.vercel.app/api/v1/login",
-      formData
-    );
-    console.log("test", response.data.result.session.token);
-    const token = response.data.result.session.token;
-    localStorage.setItem("token", token);
-    setToken(token);
-    console.log("test", response.data.result.session);
-    return response.data.result;
-  };
-
+  const queryClient = new QueryClient();
   const mutation = useMutation(login, {
     onSuccess: (data) => {
       toast.success(data.message);
@@ -72,23 +47,29 @@ const LoginForm = ({ queryClient }) => {
     queryClient,
   });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const onSubmit = async (formData) => {
     const requestData = {
       username: formData.email,
       password: formData.password,
     };
-
     mutation.mutate(requestData);
+  };
+
+  const handlePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <ToastContainer />
-      {mutation.isLoading && (
-        <div className="overlay">
-          <div className="loading"></div>
-        </div>
-      )}
       <TextField
         {...register("email")}
         label="Email Address"
@@ -137,13 +118,29 @@ const LoginForm = ({ queryClient }) => {
           mb: -12,
           backgroundColor: "#1677ff",
           color: "white",
+          position: "relative",
         }}
         disabled={mutation.isLoading}
       >
+        {mutation.isLoading && (
+          <div className="loading">
+            <div className="loader"></div>
+          </div>
+        )}
         Login
       </Button>
     </form>
   );
 };
 
-export default login;
+const LoginPage = () => {
+  const queryClient = new QueryClient();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <LoginForm />
+    </QueryClientProvider>
+  );
+};
+
+export default LoginPage;

@@ -16,6 +16,10 @@ import {
   Typography,
   Grid,
   TextField,
+  CircularProgress,
+  useMediaQuery,
+  ThemeProvider,
+  createTheme,
 } from "@mui/material";
 import {
   FirstPageRounded as FirstPageRoundedIcon,
@@ -25,10 +29,10 @@ import {
   SearchRounded as SearchIcon,
 } from "@mui/icons-material";
 import { styled } from "@mui/system";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
+import UserDetailsLink from "./userlink";
 import { tablePaginationClasses } from "@mui/base/TablePagination/tablePaginationClasses";
-import Link from "next/link";
+
 const debounce = (func, delay) => {
   let timeoutId;
   return function (...args) {
@@ -44,6 +48,7 @@ const TableComponent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -55,43 +60,64 @@ const TableComponent = () => {
   const debouncedSearch = debounce((value) => {
     setCurrentPage(1);
     setSearchQuery(value);
-  }, 100);
+  }, 300);
+
+  const theme = createTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   if (!token) {
     return <p>Please log in to view this page.</p>;
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div style={{ marginBottom: 20, textAlign: "right" }}>
-        <Typography
-          variant="h6"
-          style={{ color: "black", textAlign: "center" }}
-        >
-          Dashboard/Individual User
-        </Typography>
-        <TextField
-          label="Search by Name, Mobile, Email"
-          variant="outlined"
-          size="small"
-          value={searchQuery}
-          onChange={(e) => debouncedSearch(e.target.value)}
-          InputProps={{
-            endAdornment: <SearchIcon />,
-          }}
-          style={{ width: "300px", height: "auto", marginRight: "34px" }}
-        />
-      </div>
-      <UsersTable
-        token={token}
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={setRowsPerPage}
-        searchQuery={searchQuery}
-        onClearSearch={() => setSearchQuery("")}
-      />
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <QueryClientProvider client={queryClient}>
+            <div style={{ marginBottom: 20, textAlign: "right" }}>
+              <Typography
+                variant="h6"
+                style={{ color: "black", textAlign: "center" }}
+              >
+                Dashboard/Individual User
+              </Typography>
+              <TextField
+                label="Search by Name, Mobile, Email"
+                variant="outlined"
+                size="small"
+                value={searchQuery}
+                onChange={(e) => debouncedSearch(e.target.value)}
+                InputProps={{
+                  endAdornment: <SearchIcon />,
+                }}
+                style={{
+                  width: "100%",
+                  maxWidth: 300,
+                  marginRight: isSmallScreen ? 0 : "34px",
+                  marginTop: isSmallScreen ? "10px" : "23px",
+                }}
+              />
+            </div>
+            {isLoading ? (
+              <div style={{ textAlign: "center", marginTop: "20px" }}>
+                <CircularProgress />
+              </div>
+            ) : (
+              <UsersTable
+                token={token}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={setRowsPerPage}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery("")}
+                setIsLoading={setIsLoading}
+              />
+            )}
+          </QueryClientProvider>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
   );
 };
 
@@ -135,7 +161,7 @@ const UsersTable = ({
   rowsPerPage,
   onRowsPerPageChange,
   searchQuery,
-  onClearSearch,
+  setIsLoading,
 }) => {
   const { data, isLoading, isError } = useQuery(
     ["users", currentPage, rowsPerPage, searchQuery],
@@ -143,19 +169,39 @@ const UsersTable = ({
       fetchUsers({
         token,
         page: currentPage,
-        pageSize: rowsPerPage,
+        pageSize: rowsPerPage === -1 ? 9999 : rowsPerPage,
         keyword: searchQuery,
       }),
     {
       keepPreviousData: true,
+      onSuccess: () => {
+        setIsLoading(false);
+      },
+      onError: () => {
+        setIsLoading(false);
+      },
     }
   );
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error fetching data: {isError.message}</p>;
+  const handlePageChange = (event, newPage) => {
+    onPageChange(newPage + 1);
+  };
+
+  const handleRowsPerPageChange = (event) => {
+    onRowsPerPageChange(parseInt(event.target.value, 10));
+    onPageChange(1);
+  };
+
+  if (isLoading) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   let users = data?.data || [];
-  const { totalPages, totalLength } = data?.meta_data || {};
+  const { totalLength } = data?.meta_data || {};
 
   if (searchQuery) {
     const query = searchQuery.toLowerCase();
@@ -167,15 +213,6 @@ const UsersTable = ({
       );
     });
   }
-
-  const handlePageChange = (event, newPage) => {
-    onPageChange(newPage + 1);
-  };
-
-  const handleRowsPerPageChange = (event) => {
-    onRowsPerPageChange(parseInt(event.target.value, 10));
-    onPageChange(1);
-  };
 
   return (
     <div style={{ textAlign: "center", marginTop: "auto" }}>
@@ -207,18 +244,12 @@ const UsersTable = ({
                         user.status === "active" ? "#90EE90" : "#FF7F7F",
                       color: "#fff",
                     }}
-                    disableElevation
-                    disableRipple
                   >
                     {user.status}
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <Link href={`/viewUser/userId=${user._id}`}>
-                    <IconButton style={{ color: "#4caf50" }}>
-                      <VisibilityIcon />
-                    </IconButton>
-                  </Link>
+                  <UserDetailsLink userId={user._id} />
                   <IconButton style={{ color: "#1976d2" }}>
                     <EditIcon />
                   </IconButton>
@@ -239,7 +270,7 @@ const UsersTable = ({
             variant="body2"
             style={{ color: "black", marginLeft: "40px" }}
           >
-            Total Individual User's: {totalLength}
+            Total Individual Users: {totalLength}
           </Typography>
         </Grid>
         <Grid item>

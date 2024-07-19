@@ -149,7 +149,7 @@ export default function PersistentDrawerLeft() {
         open={open}
       >
         <DrawerHeader>
-          <Image src={logo} alt="Logo" width={200} height={100} />
+          <Image src={logo} alt="Logo" width={220} height={80} />
         </DrawerHeader>
         <List>
           {menuItems.map((item, index) => (
