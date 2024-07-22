@@ -31,7 +31,7 @@ import {
 import { styled } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
 import UserDetailsLink from "./userlink";
-import { tablePaginationClasses } from "@mui/base/TablePagination/tablePaginationClasses";
+import { tablePaginationClasses } from "@mui/base/tablePagination/tablePaginationClasses";
 
 const debounce = (func, delay) => {
   let timeoutId;
