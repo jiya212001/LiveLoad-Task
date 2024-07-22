@@ -11,7 +11,6 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -32,6 +31,9 @@ import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
 import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
 import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutlined";
+import Link from "next/link";
+import Image from "next/image";
+import logo from "../../../public/faviconLiveload.png";
 
 const drawerWidth = 240;
 
@@ -75,32 +77,36 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
+
 const menuItems = [
-  { text: "Dashboard", icon: <DashboardIcon /> },
-  { text: "Individual Users", icon: <PersonOutlineOutlinedIcon /> },
-  { text: "Business Users", icon: <GroupOutlinedIcon /> },
-  { text: "Vendors", icon: <BoyIcon /> },
-  { text: "Drivers", icon: <AirlineSeatReclineNormalIcon /> },
-  { text: "Orders", icon: <FormatListBulletedIcon /> },
-  { text: "Reviews", icon: <StarIcon /> },
-  { text: "Transactions", icon: <ReceiptLongOutlinedIcon /> },
-  { text: "Withdrawals", icon: <CreditCardOutlinedIcon /> },
-  { text: "Item Categories", icon: <EventNoteIcon /> },
-  { text: "Vehicle Categories", icon: <LocalShippingIcon /> },
-  { text: "Notifications", icon: <NotificationsNoneOutlinedIcon /> },
-  { text: "Contacts Us", icon: <ContactPhoneOutlinedIcon /> },
-  { text: "FAQ's", icon: <LiveHelpOutlinedIcon /> },
-  { text: "CMS Pages", icon: <AutoStoriesOutlinedIcon /> },
-  { text: "Settings", icon: <SettingsSuggestOutlinedIcon /> },
+  { text: "Dashboard", icon: <DashboardIcon />, link: "/" },
+  {
+    text: "Individual Users",
+    icon: <PersonOutlineOutlinedIcon />,
+    link: "/individualusers",
+  },
+  { text: "Business Users", icon: <GroupOutlinedIcon />, link: "#" },
+  { text: "Vendors", icon: <BoyIcon />, link: "#" },
+  { text: "Drivers", icon: <AirlineSeatReclineNormalIcon />, link: "#" },
+  { text: "Orders", icon: <FormatListBulletedIcon />, link: "#" },
+  { text: "Reviews", icon: <StarIcon />, link: "#" },
+  { text: "Transactions", icon: <ReceiptLongOutlinedIcon />, link: "#" },
+  { text: "Withdrawals", icon: <CreditCardOutlinedIcon />, link: "#" },
+  { text: "Item Categories", icon: <EventNoteIcon />, link: "#" },
+  { text: "Vehicle Categories", icon: <LocalShippingIcon />, link: "#" },
+  { text: "Notifications", icon: <NotificationsNoneOutlinedIcon />, link: "#" },
+  { text: "Contacts Us", icon: <ContactPhoneOutlinedIcon />, link: "#" },
+  { text: "FAQ's", icon: <LiveHelpOutlinedIcon />, link: "#" },
+  { text: "CMS Pages", icon: <AutoStoriesOutlinedIcon />, link: "#" },
+  { text: "Settings", icon: <SettingsSuggestOutlinedIcon />, link: "#" },
 ];
 
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -118,11 +124,11 @@ export default function PersistentDrawerLeft() {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={open ? handleDrawerClose : handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
+            sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            {open ? <ChevronLeftIcon /> : <MenuIcon />}{" "}
           </IconButton>
           <Typography variant="h6" noWrap component="div">
             Liveload's | Welcome Admin
@@ -143,28 +149,29 @@ export default function PersistentDrawerLeft() {
         open={open}
       >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
+          <Image src={logo} alt="Logo" width={220} height={80} />
         </DrawerHeader>
         <List>
           {menuItems.map((item, index) => (
             <ListItem key={item.text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
+              {item.text === "Individual Users" ? (
+                <Link href={item.link} passHref>
+                  <ListItemButton>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItemButton>
+                </Link>
+              ) : (
+                <ListItemButton>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              )}
             </ListItem>
           ))}
         </List>
       </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-      </Main>
+      <Main open={open}></Main>
     </Box>
   );
 }
