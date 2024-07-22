@@ -39,7 +39,7 @@ const LoginForm = () => {
   const mutation = useMutation(login, {
     onSuccess: (data) => {
       toast.success(data.message);
-      router.push("/success");
+      router.push("/dashboard");
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message);

@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import PersistentDrawerLeft from "@/app/success/page";
 import {
   Typography,
   Paper,
@@ -16,6 +15,7 @@ import {
   Box,
 } from "@mui/material";
 import Image from "next/image";
+import PersistentDrawerLeft from "@/components/sidebar";
 
 export default function IndividualUser() {
   const [token, setToken] = useState(null);

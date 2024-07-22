@@ -1,5 +1,5 @@
 "use-client";
-import Login from "@/components/login";
+import Login from "./auth/login/page";
 
 import { Box, Stack, Typography } from "@mui/material";
 import Image from "next/image";

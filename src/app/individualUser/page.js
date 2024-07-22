@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
-import UsersTable from "../../components/usertable";
-import PersistentDrawerLeft from "../success/page";
 import { Grid } from "@mui/material";
+
+import PersistentDrawerLeft from "@/components/sidebar";
+import TableComponent from "../user";
 
 const IndividualUsersPage = () => {
   return (
@@ -20,7 +21,7 @@ const IndividualUsersPage = () => {
           marginTop: "30px",
         }}
       >
-        <UsersTable />
+        <TableComponent />
       </Grid>
     </Grid>
   );

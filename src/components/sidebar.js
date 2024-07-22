@@ -33,7 +33,7 @@ import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutlined";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../../public/faviconLiveload.png";
+import logo from ".././../public/faviconLiveload.png";
 
 const drawerWidth = 240;
 
@@ -86,7 +86,7 @@ const menuItems = [
   {
     text: "Individual Users",
     icon: <PersonOutlineOutlinedIcon />,
-    link: "/individualusers",
+    link: "/individualUser",
   },
   { text: "Business Users", icon: <GroupOutlinedIcon />, link: "#" },
   { text: "Vendors", icon: <BoyIcon />, link: "#" },
