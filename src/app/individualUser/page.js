@@ -1,16 +1,12 @@
 "use client";
 import React from "react";
 import { Grid } from "@mui/material";
-
-import PersistentDrawerLeft from "@/components/sidebar";
-import TableComponent from "../user";
+import TableComponent from "../api/v1/users";
 
 const IndividualUsersPage = () => {
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={4}>
-        <PersistentDrawerLeft />
-      </Grid>
+      <Grid item xs={12} md={4}></Grid>
       <Grid
         item
         xs={12}

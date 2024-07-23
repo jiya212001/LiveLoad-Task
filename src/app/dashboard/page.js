@@ -1,30 +1,28 @@
 "use client";
-import React from "react";
-import { Grid } from "@mui/material";
+import Typography from "@mui/material/Typography";
 
-import PersistentDrawerLeft from "@/components/sidebar";
-import main from "../main";
-
-const IndividualUsersPage = () => {
+export default function main() {
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={4}>
-        <PersistentDrawerLeft />
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        md={11}
-        style={{
-          width: "100vw",
-          marginLeft: "230px",
-          marginTop: "30px",
+    <>
+      <Typography
+        variant="h5"
+        component="div"
+        sx={{
+          fontSize: "clamp(0.875)",
+          lineHeight: 1.57,
+          fontFamily: "sans-serif",
+          fontWeight: 600,
+          color: "black",
+          cursor: "pointer",
+          position: "absolute",
+          top: "100px",
+          left: "300px",
+          maxWidth: "90vw",
+          textAlign: "center",
         }}
       >
-        <main />
-      </Grid>
-    </Grid>
+        Welcome To dashboard Page
+      </Typography>
+    </>
   );
-};
-
-export default IndividualUsersPage;
+}
