@@ -17,7 +17,8 @@ export default function RootLayout({ children }) {
     setShowDrawer(
       pathname === "/dashboard" ||
         pathname === "/individualUser" ||
-        pathname === "/viewUser/id"
+        pathname === "/viewUser/id" ||
+        pathname === "/settings"
     );
   }, [pathname]);
 

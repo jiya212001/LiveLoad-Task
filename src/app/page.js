@@ -1,9 +1,8 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Image from "next/image";
-import Link from "next/link";
 
 const BackgroundImage = () => {
   const router = useRouter();

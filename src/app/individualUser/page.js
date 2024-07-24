@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Grid } from "@mui/material";
-import TableComponent from "../api/v1/users";
+import TableComponent from "../user";
 
 const IndividualUsersPage = () => {
   return (

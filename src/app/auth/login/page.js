@@ -6,17 +6,16 @@ import { TextField, IconButton, InputAdornment } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useMutation, QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import toast from "react-hot-toast";
 import * as yup from "yup";
-import BackgroundImage from "@/app/page";
-import { Stack, Typography } from "@mui/material";
-
+import { login } from "../../api/login";
+import { Typography } from "@mui/material";
+import "./style.css";
 import Link from "next/link";
-import Common from "../layout";
+
 const schema = yup.object().shape({
   email: yup
     .string()
@@ -24,16 +23,6 @@ const schema = yup.object().shape({
     .required("Email is required"),
   password: yup.string().required("Password is required"),
 });
-
-const login = async (formData) => {
-  const response = await axios.post(
-    "https://liveload-api.vercel.app/api/v1/login",
-    formData
-  );
-  const token = response.data.result.session.token;
-  localStorage.setItem("token", token);
-  return response.data.result;
-};
 
 const LoginForm = () => {
   const router = useRouter();

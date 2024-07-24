@@ -34,6 +34,7 @@ import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutl
 import Link from "next/link";
 import Image from "next/image";
 import logo from ".././../public/faviconLiveload.png";
+import { useRouter } from "next/navigation";
 
 const drawerWidth = 240;
 
@@ -82,7 +83,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 const menuItems = [
-  { text: "Dashboard", icon: <DashboardIcon />, link: "/" },
+  { text: "Dashboard", icon: <DashboardIcon />, link: "/dashboard" },
   {
     text: "Individual Users",
     icon: <PersonOutlineOutlinedIcon />,
@@ -101,12 +102,21 @@ const menuItems = [
   { text: "Contacts Us", icon: <ContactPhoneOutlinedIcon />, link: "#" },
   { text: "FAQ's", icon: <LiveHelpOutlinedIcon />, link: "#" },
   { text: "CMS Pages", icon: <AutoStoriesOutlinedIcon />, link: "#" },
-  { text: "Settings", icon: <SettingsSuggestOutlinedIcon />, link: "#" },
+  {
+    text: "Settings",
+    icon: <SettingsSuggestOutlinedIcon />,
+    link: "/settings",
+  },
 ];
 
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  const router = useRouter();
+
+  const initialSelectedItem =
+    menuItems.find((item) => router.pathname === item.link) || menuItems[0];
+  const [selectedItem, setSelectedItem] = React.useState(initialSelectedItem);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -114,6 +124,11 @@ export default function PersistentDrawerLeft() {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleMenuItemClick = (item) => {
+    setSelectedItem(item);
+    setOpen(true);
   };
 
   return (
@@ -152,21 +167,20 @@ export default function PersistentDrawerLeft() {
           <Image src={logo} alt="Logo" width={220} height={80} />
         </DrawerHeader>
         <List>
-          {menuItems.map((item, index) => (
-            <ListItem key={item.text} disablePadding>
-              {item.text === "Individual Users" ? (
-                <Link href={item.link} passHref>
-                  <ListItemButton>
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.text} />
-                  </ListItemButton>
-                </Link>
-              ) : (
-                <ListItemButton>
+          {menuItems.map((item) => (
+            <ListItem
+              key={item.text}
+              disablePadding
+              selected={selectedItem === item}
+              onClick={() => handleMenuItemClick(item)}
+              button
+            >
+              <Link href={item.link} passHref>
+                <ListItemButton selected={selectedItem === item}>
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ListItemText primary={item.text} />
                 </ListItemButton>
-              )}
+              </Link>
             </ListItem>
           ))}
         </List>
