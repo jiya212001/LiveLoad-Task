@@ -6,13 +6,14 @@ import Provider from "@/util/Provider";
 import { Toaster } from "react-hot-toast";
 import PersistentDrawerLeft from "@/components/sidebar";
 import { usePathname } from "next/navigation";
-import BackgroundImage from "./page";
+// import Common from "./auth/layout";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
   const [showDrawer, setShowDrawer] = useState(false);
-  const [background, setBackground] = useState(false);
+  // const [common, setCommon] = useState(false);
   useEffect(() => {
     setShowDrawer(
       pathname === "/dashboard" ||
@@ -22,13 +23,13 @@ export default function RootLayout({ children }) {
     );
   }, [pathname]);
 
-  useEffect(() => {
-    setBackground(
-      pathname === "/auth/login" ||
-        pathname === "/auth/forgotPassword" ||
-        pathname === "/auth/signup"
-    );
-  }, [pathname]);
+  // useEffect(() => {
+  //   setCommon(
+  //     pathname === "/auth/login" ||
+  //       pathname === "/auth/forgotPassword" ||
+  //       pathname === "/auth/signup"
+  //   );
+  // }, [pathname]);
 
   return (
     <html lang="en">
@@ -37,9 +38,8 @@ export default function RootLayout({ children }) {
       </head>
       <body className={inter.className}>
         <Toaster position="top-right" />
-        {showDrawer && <PersistentDrawerLeft>{children}</PersistentDrawerLeft>}
+        {showDrawer && <PersistentDrawerLeft></PersistentDrawerLeft>}
         <Provider>{children}</Provider>
-        {background && <BackgroundImage>{children}</BackgroundImage>}
       </body>
     </html>
   );

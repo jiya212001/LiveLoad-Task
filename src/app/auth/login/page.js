@@ -13,8 +13,10 @@ import toast from "react-hot-toast";
 import * as yup from "yup";
 import { login } from "../../api/login";
 import { Typography } from "@mui/material";
+
 import "./style.css";
 import Link from "next/link";
+import { useTheme } from "@mui/material/styles";
 
 const schema = yup.object().shape({
   email: yup
@@ -25,6 +27,7 @@ const schema = yup.object().shape({
 });
 
 const LoginForm = () => {
+  const theme = useTheme();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const queryClient = new QueryClient();
@@ -71,14 +74,14 @@ const LoginForm = () => {
           fontFamily="Public Sans"
           sx={{
             position: "absolute",
-            top: "40px",
-            left: "20px",
+            top: "350px",
+            left: "709px",
             fontSize: "24px",
-
+            zIndex: 10,
             "@media (max-width: 344px)": {
               fontSize: "1.24rem",
-              top: "50px",
-              left: "20px",
+              top: "100px",
+              left: "200px",
             },
           }}
         >
@@ -96,10 +99,10 @@ const LoginForm = () => {
               color: "#3466d1",
               cursor: "pointer",
               position: "absolute",
-              top: "47px",
-              right: "8px",
-
-              "@media (max-width: 344px)": {
+              top: "360px",
+              right: "710px",
+              zIndex: 10,
+              "@media (max-width: 468px)": {
                 fontSize: "0.875rem",
                 top: "calc(60px + 28px)",
                 right: "calc(17px + 22px)",
@@ -120,7 +123,11 @@ const LoginForm = () => {
           required
           error={!!errors.email}
           helperText={errors.email?.message}
-          sx={{ mb: 2, "& .MuiInputBase-input": { height: "1rem" } }}
+          sx={{
+            mb: 2,
+            "& .MuiInputBase-input": { height: "1rem" },
+            zIndex: 10,
+          }}
         />
 
         <TextField
@@ -133,7 +140,11 @@ const LoginForm = () => {
           required
           error={!!errors.password}
           helperText={errors.password?.message}
-          sx={{ mb: 2, "& .MuiInputBase-input": { height: "1rem" } }}
+          sx={{
+            mb: 2,
+            "& .MuiInputBase-input": { height: "1rem" },
+            zIndex: 10,
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -160,8 +171,9 @@ const LoginForm = () => {
               color: "#262626",
               cursor: "pointer",
               position: "absolute",
-              bottom: "100px",
-              right: "23px",
+              bottom: "400px",
+              right: "710px",
+              zIndex: 10,
             }}
           >
             Forgot Password?
@@ -177,6 +189,7 @@ const LoginForm = () => {
             backgroundColor: "#1677ff",
             color: "white",
             position: "relative",
+            zIndex: 10,
           }}
           disabled={mutation.isLoading}
         >

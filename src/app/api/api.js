@@ -1,5 +1,9 @@
 import axios from "axios";
 
+const axiosInstance = axios.create({
+  baseURL: "https://liveload-api.vercel.app/api/v1/",
+});
+
 const fetchUsers = async ({
   page = 1,
   pageSize = 10,
@@ -17,14 +21,14 @@ const fetchUsers = async ({
     },
   };
 
-  let url = `https://liveload-api.vercel.app/api/v1/users?pageNo=${page}&pageSize=${pageSize}&type=${type}&role=${role}&sortBy=${sortBy}&sortDir=${sortDir}&fields=${fields}`;
+  let endpoint = `users?pageNo=${page}&pageSize=${pageSize}&type=${type}&role=${role}&sortBy=${sortBy}&sortDir=${sortDir}&fields=${fields}`;
 
   if (keyword) {
-    url += `&keyword=${keyword}`;
+    endpoint += `&keyword=${keyword}`;
   }
 
   try {
-    const response = await axios.get(url, config);
+    const response = await axiosInstance.get(endpoint, config);
     return response.data.result;
   } catch (error) {
     throw new Error(

@@ -18,17 +18,16 @@ const password = () => {
           fontSize: "clamp(0.875)",
           lineHeight: 1.57,
           fontFamily: "sans-serif",
-          fontWeight: 600,
+          fontWeight: 200,
           color: "#262626",
           cursor: "pointer",
           position: "absolute",
-          top: "3vh",
-          left: "3vw",
-          maxWidth: "90vw",
+          top: "350px",
+          left: "700px",
           textAlign: "center",
         }}
       >
-        Forgot Password? Please Enter old and new Password over here
+        Forgot Password? Reset Your Password
       </Typography>
     </>
   );

@@ -23,8 +23,8 @@ const Signup = () => {
           color: "#262626",
           cursor: "pointer",
           position: "absolute",
-          top: "3vh",
-          left: "3vw",
+          top: "350px",
+          left: "700px",
           maxWidth: "90vw",
           textAlign: "center",
         }}
