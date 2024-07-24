@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import {
   Paper,
@@ -30,8 +29,9 @@ import {
 } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
-import UserDetailsLink from "./userlink";
+import UserDetailsLink from "../components/userlink";
 import { tablePaginationClasses } from "@mui/base/TablePagination/tablePaginationClasses";
+import { fetchUsers } from "../app/api/api";
 
 const debounce = (func, delay) => {
   let timeoutId;
@@ -119,39 +119,6 @@ const TableComponent = () => {
       </Grid>
     </ThemeProvider>
   );
-};
-
-const fetchUsers = async ({
-  page = 1,
-  pageSize = 10,
-  type = "individual",
-  role = "user",
-  sortBy = "createdAt",
-  sortDir = "desc",
-  fields = "name,mobile,email,status",
-  token,
-  keyword,
-}) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  let url = `https://liveload-api.vercel.app/api/v1/users?pageNo=${page}&pageSize=${pageSize}&type=${type}&role=${role}&sortBy=${sortBy}&sortDir=${sortDir}&fields=${fields}`;
-
-  if (keyword) {
-    url += `&keyword=${keyword}`;
-  }
-
-  try {
-    const response = await axios.get(url, config);
-    return response.data.result;
-  } catch (error) {
-    throw new Error(
-      error.response ? error.response.data.message : error.message
-    );
-  }
 };
 
 const UsersTable = ({

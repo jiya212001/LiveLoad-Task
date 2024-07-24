@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import PersistentDrawerLeft from "@/app/success/page";
 import {
   Typography,
   Paper,
@@ -16,6 +15,8 @@ import {
   Box,
 } from "@mui/material";
 import Image from "next/image";
+import PersistentDrawerLeft from "@/components/sidebar";
+import { fetchUserDetails } from "../../api/User/[id]"; // adjust the path based on your project structure
 
 export default function IndividualUser() {
   const [token, setToken] = useState(null);
@@ -45,18 +46,10 @@ export default function IndividualUser() {
   }, []);
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
+    const fetchUserDetailsData = async () => {
       if (token && userId) {
-        const url = `https://liveload-api.vercel.app/api/v1/users/${userId}`;
-
         try {
-          const response = await fetch(url, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          const userData = await response.json();
+          const userData = await fetchUserDetails(token, userId);
           setUserData(userData);
         } catch (error) {
           console.error("Error fetching user details:", error.message);
@@ -66,7 +59,7 @@ export default function IndividualUser() {
       }
     };
 
-    fetchUserDetails();
+    fetchUserDetailsData();
   }, [token, userId]);
 
   const handleTabChange = (event, newValue) => {

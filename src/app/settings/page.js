@@ -1,25 +1,25 @@
-import Typography from "@mui/material/Typography";
+import { Typography } from "@mui/material";
 
-export default function Signup() {
+export default function settings() {
   return (
     <Typography
       variant="h5"
       component="div"
       sx={{
-        fontSize: "clamp(2.345rem)",
+        fontSize: "clamp(0.875)",
         lineHeight: 1.57,
         fontFamily: "sans-serif",
-        fontWeight: 400,
-        color: "black",
+        fontWeight: 600,
+        color: "#262626",
         cursor: "pointer",
         position: "absolute",
-        top: "3vh",
-        left: "3vw",
+        top: "100px",
+        left: "250px",
         maxWidth: "90vw",
         textAlign: "center",
       }}
     >
-      Please register over here
+      Please reset your settings from here
     </Typography>
   );
 }
