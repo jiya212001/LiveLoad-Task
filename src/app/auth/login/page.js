@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import * as yup from "yup";
 import { login } from "../../api/login";
 import { Typography } from "@mui/material";
-
+import Grid from "@mui/material";
 import "./style.css";
 import Link from "next/link";
 import { useTheme } from "@mui/material/styles";
@@ -26,6 +26,15 @@ const schema = yup.object().shape({
   password: yup.string().required("Password is required"),
 });
 
+const LoginPage = () => {
+  const queryClient = new QueryClient();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <LoginForm />
+    </QueryClientProvider>
+  );
+};
 const LoginForm = () => {
   const theme = useTheme();
   const router = useRouter();
@@ -66,153 +75,125 @@ const LoginForm = () => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ToastContainer />
-        <Typography
-          variant="h3"
-          fontWeight={600}
-          color={"#262626"}
-          lineHeight={1.33}
-          fontFamily="Public Sans"
-          sx={{
-            position: "absolute",
-            top: "350px",
-            left: "709px",
-            fontSize: "24px",
-            zIndex: 10,
-            "@media (max-width: 344px)": {
-              fontSize: "1.24rem",
-              top: "100px",
-              left: "200px",
-            },
-          }}
-        >
-          Login To LiveLoads
-        </Typography>
-        <Link href={"/auth/signup"}>
-          <Typography
-            variant="h5"
-            sx={{
-              textDecoration: "none",
-              fontSize: "14px",
-              lineHeight: 1.57,
-              fontFamily: "Public Sans",
-              fontWeight: 400,
-              color: "#3466d1",
-              cursor: "pointer",
-              position: "absolute",
-              top: "360px",
-              right: "710px",
-              zIndex: 10,
-              "@media (max-width: 468px)": {
-                fontSize: "0.875rem",
-                top: "calc(60px + 28px)",
-                right: "calc(17px + 22px)",
-              },
-            }}
-          >
-            Don&apos;t have an account?
-          </Typography>
-        </Link>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography
+              variant="h3"
+              fontWeight={600}
+              color={"#262626"}
+              lineHeight={1.33}
+              fontFamily="Public Sans"
+            >
+              Login To LiveLoads
+            </Typography>
+          </Grid>
 
-        <TextField
-          {...register("email")}
-          label="Email Address"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          type="email"
-          required
-          error={!!errors.email}
-          helperText={errors.email?.message}
-          sx={{
-            mb: 2,
-            "& .MuiInputBase-input": { height: "1rem" },
-            zIndex: 10,
-          }}
-        />
+          <Grid item xs={12}>
+            <Link href={"/auth/signup"}>
+              <Typography
+                variant="h5"
+                sx={{
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  lineHeight: 1.57,
+                  fontFamily: "Public Sans",
+                  fontWeight: 400,
+                  color: "#3466d1",
+                  cursor: "pointer",
+                }}
+              >
+                Don&apos;t have an account?
+              </Typography>
+            </Link>
+          </Grid>
 
-        <TextField
-          {...register("password")}
-          label="Password"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          type={showPassword ? "text" : "password"}
-          required
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          sx={{
-            mb: 2,
-            "& .MuiInputBase-input": { height: "1rem" },
-            zIndex: 10,
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handlePasswordVisibility}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <Link href={"/auth/forgotPassword"}>
-          <Typography
-            variant="h5"
-            sx={{
-              textDecoration: "none",
-              fontSize: "14px",
-              lineHeight: 1.57,
-              fontFamily: "Public Sans",
-              fontWeight: 600,
-              color: "#262626",
-              cursor: "pointer",
-              position: "absolute",
-              bottom: "400px",
-              right: "710px",
-              zIndex: 10,
-            }}
-          >
-            Forgot Password?
-          </Typography>
-        </Link>
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          margin="normal"
-          sx={{
-            mb: -12,
-            backgroundColor: "#1677ff",
-            color: "white",
-            position: "relative",
-            zIndex: 10,
-          }}
-          disabled={mutation.isLoading}
-        >
-          {mutation.isLoading && (
-            <div className="loading">
-              <div className="loader"></div>
-            </div>
-          )}
-          Login
-        </Button>
+          <Grid item xs={12}>
+            <TextField
+              {...register("email")}
+              label="Email Address"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              type="email"
+              required
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              {...register("password")}
+              label="Password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              type={showPassword ? "text" : "password"}
+              required
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handlePasswordVisibility}
+                      edge="end"
+                    >
+                      {showPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Link href={"/auth/forgotPassword"}>
+              <Typography
+                variant="h5"
+                sx={{
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  lineHeight: 1.57,
+                  fontFamily: "Public Sans",
+                  fontWeight: 600,
+                  color: "#262626",
+                  cursor: "pointer",
+                }}
+              >
+                Forgot Password?
+              </Typography>
+            </Link>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              sx={{
+                backgroundColor: "#1677ff",
+                color: "white",
+              }}
+              disabled={mutation.isLoading}
+            >
+              {mutation.isLoading && (
+                <div className="loading">
+                  <div className="loader"></div>
+                </div>
+              )}
+              Login
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </>
   );
 };
 
-const LoginPage = () => {
-  const queryClient = new QueryClient();
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <LoginForm />
-    </QueryClientProvider>
-  );
-};
-
-export default LoginPage;
+export default LoginForm;
